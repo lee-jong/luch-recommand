@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="header">
-      <div class="center">점심 메뉴 추천</div>
+      <div class="font-size-xl center">점심 메뉴 추천</div>
       <v-menu>
         <template v-slot:activator="{ props }">
           <v-btn color="white" v-bind="props"> 음식점 리스트 </v-btn>
@@ -22,8 +22,9 @@
 
     <v-card class="option-box">
       <v-radio-group v-model="categotyOption" inline>
-        <div class="center">카테고리 :</div>
+        <div class="center font-size-md">카테고리 :</div>
         <v-radio
+          class="font-size-md"
           v-for="category in categoryList"
           :key="category"
           color="red"
@@ -32,9 +33,10 @@
         ></v-radio>
       </v-radio-group>
       <div class="d-flex">
-        <div class="center">팀 :</div>
-        <div class="ml-3" style="width: 40%">
+        <div class="center font-size-md">팀 :</div>
+        <div class="ml-3">
           <v-select
+            class="font-size-md"
             v-model="teamUrl"
             :items="teamList"
             item-title="name"
@@ -53,6 +55,7 @@
     />
     <div class="btns d-flex">
       <v-btn
+        class="font-size-sm"
         :disabled="result.name == '-' || state"
         width="20%"
         rounded="xs"
@@ -61,6 +64,7 @@
         >send jandi!</v-btn
       >
       <v-btn
+        class="font-size-sm"
         :disabled="state"
         width="20%"
         rounded="xs"
@@ -69,6 +73,7 @@
         >start!</v-btn
       >
       <v-btn
+        class="font-size-sm"
         :disabled="!state"
         rounded="xs"
         size="x-large"
@@ -145,8 +150,9 @@ watch(categotyOption, (option) => {
 
 <style scoped lang="scss">
 .container {
-  margin: 0 60px;
+  margin: 0 5%;
 }
+
 .header {
   margin-top: 30px;
   display: flex;
@@ -162,7 +168,7 @@ watch(categotyOption, (option) => {
   margin-top: 30px;
   display: grid;
   grid-template-columns: (2fr, 1fr);
-  gap: 20px;
+  gap: 3%;
   justify-content: end;
 }
 
