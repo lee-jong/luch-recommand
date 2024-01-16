@@ -37,7 +37,7 @@
         <div class="ml-3">
           <v-select
             class="font-size-md"
-            v-model="teamUrl"
+            v-model="teamKey"
             :items="teamList"
             item-title="name"
             item-value="webhookUrl"
@@ -60,7 +60,7 @@
         width="20%"
         rounded="xs"
         size="x-large"
-        @click="sendJandiWebhook"
+        @click="send"
         >send jandi!</v-btn
       >
       <v-btn
@@ -86,14 +86,16 @@
 </template>
 <script lang="ts" setup>
 import { ref, watch } from "vue";
-import { lunchList, categoryList, teamList } from "../helper/json";
+import { lunchList, categoryList, teamList } from "@/helper/json";
+import { sendJandiWebhook } from "@/api/jandi";
+import { getKakaoSearch } from "@/api/kakao";
 
 const state = ref(false);
 const result = ref<item>({ category: "-", name: "-", distance: 0 });
 const timer = ref<NodeJS.Timeout | undefined>(undefined);
 const list = ref<item[]>(lunchList);
 const categotyOption = ref("전체");
-const teamUrl = ref(teamList[0].webhookUrl);
+const teamKey = ref(teamList[0].webhookUrl);
 
 const random = () => {
   state.value = true;
@@ -110,34 +112,15 @@ const stop = () => {
   timer.value = undefined;
 };
 
-const sendJandiWebhook = () => {
-  const { name, distance } = result.value;
-  const data = {
-    body: "오늘의 점심 메뉴",
-    connectColor: "#FAC11B",
-    connectInfo: [
-      {
-        title: name,
-        description: `거리 ${distance}m`,
-        imageUrl: "https://lunchlyfe.web.app/",
-      },
-    ],
+const send = async () => {
+  const query = "야탑 " + result.value.name;
+  const searchData = await getKakaoSearch(query);
+  const info = {
+    ...result.value,
+    key: teamKey.value,
+    imageUrl: searchData.documents[0].url,
   };
-  fetch(teamUrl.value, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-    })
-    .catch((error) => {
-      console.error("오류 발생:", error);
-    });
+  sendJandiWebhook(info);
 };
 
 watch(categotyOption, (option) => {

@@ -3,15 +3,16 @@
   "version": "1.0.1",
   "private": true,
   "scripts": {
-    "serve": "vite preview",
     "build": "vite build",
-    "build-only": "vite build",
     "dev": "vite",
     "preview": "vite preview",
+    "deploy": "vite build && firebase deploy",
+    "serve": "firebase serve",
     "type-check": "vue-tsc --build --force"
   },
   "dependencies": {
     "@mdi/font": "5.9.55",
+    "axios": "^1.6.5",
     "pinia": "^2.1.7",
     "roboto-fontface": "*",
     "vue": "^3.3.11",
